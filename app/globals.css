@@ -1,0 +1,49 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Hind Siliguri", "Noto Sans Bengali", system-ui, sans-serif;
+  --color-leaf-50: #f1f9ee;
+  --color-leaf-100: #dcf0d5;
+  --color-leaf-200: #bce0ae;
+  --color-leaf-500: #3f9a3a;
+  --color-leaf-600: #2f7d2c;
+  --color-leaf-700: #266225;
+  --color-leaf-900: #153a14;
+  --color-soil-50: #fbf6ec;
+  --color-soil-100: #f4e8cf;
+  --color-soil-600: #9a6414;
+  --color-sun-400: #f5b50a;
+}
+
+html {
+  font-size: 17px;
+}
+
+body {
+  background: var(--color-soil-50);
+  color: #1c2a1b;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+.btn {
+  @apply inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 font-semibold transition active:scale-[0.98] disabled:opacity-60;
+}
+.btn-primary {
+  @apply bg-leaf-600 text-white hover:bg-leaf-700;
+}
+.btn-ghost {
+  @apply border border-leaf-200 bg-white text-leaf-700 hover:bg-leaf-50;
+}
+.btn-danger {
+  @apply bg-red-600 text-white hover:bg-red-700;
+}
+.card {
+  @apply rounded-2xl border border-leaf-100 bg-white p-5 shadow-sm;
+}
+.input {
+  @apply w-full rounded-xl border border-stone-300 bg-white px-4 py-3 outline-none focus:border-leaf-500 focus:ring-2 focus:ring-leaf-200;
+}
+.label {
+  @apply mb-1 block text-sm font-semibold text-stone-700;
+}
