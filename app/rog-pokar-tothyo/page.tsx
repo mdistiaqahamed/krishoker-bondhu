@@ -1,6 +1,10 @@
 import { getDB } from "@/lib/db";
+import AiDiseaseInfo from "@/components/AiDiseaseInfo";
 
 export const dynamic = "force-dynamic";
+
+// চন্দ্রবিন্দু বাদ দিয়ে তুলনা করে, যাতে "পেয়াজ" লিখলেও "পেঁয়াজ" মেলে
+const loose = (s?: string) => (s ?? "").normalize("NFC").replace(/\u0981/g, "").trim();
 
 export default async function RogPokarTothyo({
   searchParams,
@@ -11,7 +15,13 @@ export default async function RogPokarTothyo({
   const { diseases } = await getDB();
   const term = q.trim();
   const rows = diseases
-    .filter((d) => !term || d.name.includes(term) || d.crop.includes(term) || d.symptoms.includes(term))
+    .filter(
+      (d) =>
+        !term ||
+        loose(d.name).includes(loose(term)) ||
+        loose(d.crop).includes(loose(term)) ||
+        loose(d.symptoms).includes(loose(term))
+    )
     .sort((a, b) => a.crop.localeCompare(b.crop, "bn"));
 
   return (
@@ -23,7 +33,12 @@ export default async function RogPokarTothyo({
         <button className="btn btn-primary">খুঁজুন</button>
       </form>
 
-      {rows.length === 0 && <p className="card text-stone-500">কিছু পাওয়া যায়নি।</p>}
+      {rows.length === 0 &&
+        (term ? (
+          <AiDiseaseInfo q={term} />
+        ) : (
+          <p className="card text-stone-500">কিছু পাওয়া যায়নি।</p>
+        ))}
 
       <div className="space-y-3">
         {rows.map((d) => (
