@@ -38,6 +38,7 @@ export default function DiagnoseClient({ helpline, helplineLabel }: { helpline: 
   const [err, setErr] = useState("");
   const [res, setRes] = useState<Result | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
+  const galRef = useRef<HTMLInputElement>(null);
 
   async function onPick(e: React.ChangeEvent<HTMLInputElement>) {
     const f = e.target.files?.[0];
@@ -77,19 +78,26 @@ export default function DiagnoseClient({ helpline, helplineLabel }: { helpline: 
     setRes(null);
     setErr("");
     if (fileRef.current) fileRef.current.value = "";
+    if (galRef.current) galRef.current.value = "";
   }
 
   return (
     <div className="space-y-5">
       <div className="card space-y-4">
-        <input ref={fileRef} type="file" accept="image/*" capture="environment" onChange={onPick} className="hidden" id="photo" />
+        {/* ক্যামেরা: capture থাকায় ফোনে সরাসরি ক্যামেরা খোলে */}
+        <input ref={fileRef} type="file" accept="image/*" capture="environment" onChange={onPick} className="hidden" id="photo-cam" />
+        {/* গ্যালারি: capture নেই, তাই ফোনের ছবির তালিকা খোলে */}
+        <input ref={galRef} type="file" accept="image/*" onChange={onPick} className="hidden" id="photo-gal" />
 
         {!preview ? (
-          <label htmlFor="photo" className="flex cursor-pointer flex-col items-center gap-2 rounded-2xl border-2 border-dashed border-leaf-200 bg-leaf-50 px-4 py-10 text-center hover:bg-leaf-100">
-            <span className="text-5xl">📷</span>
-            <span className="text-lg font-bold text-leaf-700">ছবি তুলুন বা বেছে নিন</span>
-            <span className="text-sm text-stone-500">আক্রান্ত পাতা কাছ থেকে, দিনের আলোতে তুলুন</span>
-          </label>
+          <div className="rounded-2xl border-2 border-dashed border-leaf-200 bg-leaf-50 px-4 py-8 text-center">
+            <p className="text-lg font-bold text-leaf-700">আক্রান্ত পাতার ছবি দিন</p>
+            <p className="mt-1 text-sm text-stone-500">কাছ থেকে, দিনের আলোতে তুলুন</p>
+            <div className="mt-5 grid gap-3 sm:grid-cols-2">
+              <label htmlFor="photo-cam" className="btn btn-primary cursor-pointer text-lg">📷 ক্যামেরা</label>
+              <label htmlFor="photo-gal" className="btn cursor-pointer border border-leaf-200 bg-white text-lg text-leaf-700">🖼️ গ্যালারি</label>
+            </div>
+          </div>
         ) : (
           <div className="space-y-3">
             {/* eslint-disable-next-line @next/next/no-img-element */}
